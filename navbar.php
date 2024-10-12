@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary  border-bottom sticky-top">
-    <div class="container-fluid control">
+    <div class="container-fluid">
         <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i></a>
         <button class="navbar-toggler toggle" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,13 +11,13 @@
             </div>
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="/listings/new">Add new listing</a>
-                <% if(!currUser){ %>
+                <!-- < if(!currUser){ %> -->
                 <a class="nav-link " aria-current="page" href="/signup"><b>Sign Up</b></a>
                 <a class="nav-link" href="/login"><b>login</b></a>
-                <% } %>
-                <% if(currUser){ %>
+                <!-- <} %> -->
+                <!-- < if(currUser){ %> -->
                 <a class="nav-link" href="/logout"><b>logout</b></a>
-                <% } %>
+                <!-- < } %> -->
             </div>
         </div>
     </div>

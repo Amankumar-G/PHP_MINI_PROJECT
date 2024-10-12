@@ -14,15 +14,11 @@ body{
 }
 .navbar{
     height:5rem;
-    /* background-color: gray !important; */
     z-index: 1 !important;
     opacity: 1!important;
     color: white !important;
 }
-.control{
-    background-color: white !important;
-    opacity: 1 !important;
-}
+
 .fa-compass{
     color: #fe424d;
     font-size: 2rem;

@@ -7,7 +7,7 @@
         </div>
         <div>Wonderlust privet limited</div>
         <div class="f-info-links">
-            <a href="">privecy</a>
+            <a href="">privacy</a>
             <a href="">terms</a>
         </div>
     </div>
