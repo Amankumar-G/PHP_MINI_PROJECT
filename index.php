@@ -1,27 +1,33 @@
-<% layout("/layouts/boilerplate") %>
+<?php
+// Start output buffering
+ob_start();
+?>
 
-    <body>
-        <h1>All listings</h1>
-        <!-- <form method="GET" action="/listings/new">
-    <button>create new listing!</button>
-   </form> -->
-        <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-3">
-            <% for(listings of alllistings){%>
-                <a href="/listings/<%=listings._id %>" class="listing-link">
-                    <div class="card listing-card col">
-                        <img src="<%= listings.image %>" class="card-img-top" style="height: 20rem;"
-                            alt="listing_image">
-                            <div class="card-img-overlay">a</div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                <b>
-                                    <%= listings.title %>
-                                </b> <br>
-                                &#8377; <%= listings.price.toLocaleString("en-IN") %>/night
-                            </p>
-                        </div>
+    <h1>All listings</h1>
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-3">
+        <?php foreach ($alllistings as $listings): ?>
+            <a href="/listings/<?php echo $listings['_id']; ?>" class="listing-link">
+                <div class="card listing-card col">
+                    <img src="<?php echo $listings['image']; ?>" class="card-img-top" style="height: 20rem;"
+                        alt="listing_image">
+                        <div class="card-img-overlay">a</div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b>
+                                <?php echo $listings['title']; ?>
+                            </b> <br>
+                            &#8377; <?php echo number_format($listings['price'], 0, '', ','); ?>/night
+                        </p>
                     </div>
-                </a>
-                <%}%>
-        </div>
-    </body>
+                </div>
+            </a>
+        <?php endforeach; ?>
+    </div>
+
+<?php
+// Capture the content in a variable
+$content = ob_get_clean();
+
+// Include the general layout from the same folder
+include 'boilerplate.php';
+?>
