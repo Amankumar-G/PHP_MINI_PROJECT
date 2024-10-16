@@ -26,7 +26,7 @@ $conn->close();
 <h1>All Hospitals</h1>
 <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-3">
     <?php foreach ($alllistings as $listings): ?>
-        <a href="/listings/<?php echo $listings['id']; ?>" class="listing-link">
+        <a href="show.php?id=<?php echo $listings['id']; ?>" class="listing-link">
             <div class="card listing-card col">
                 <img src="https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg" class="card-img-top" style="height: 20rem;" alt="listing_image">
                 <div class="card-img-overlay">a</div>
