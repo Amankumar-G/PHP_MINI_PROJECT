@@ -38,28 +38,27 @@ if ($id) {
             <?php echo htmlspecialchars($data['hospital_name']); ?>
         </h3>
     </div>
-    <div>
+    <!-- <div> -->
         <!-- Code for edit And delete button -->
-    </div>
+    <!-- </div> -->
 </div>
 
 <div class="flex">
     <div>
-        <img class="coverImg" src="https://plus.unsplash.com/premium_photo-1682130157004-057c137d96d5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aG9zcGl0YWx8ZW58MHx8MHx8fDA%3D" alt="image">
+        <img class="coverImg" src="https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aG9zcGl0YWx8ZW58MHx8MHx8fDA%3D" alt="image">
     </div>
     <div class="box-2">
         <div class="flex dibba" style="gap: 20px;">
-            <div class="buy">
+            <div class="buy middle" >
                 <form action="/book/<?php echo $data['id']; ?>" style="display: flex; justify-content: center;">
                     <button class="form-control out" style="text-align: center; font-weight: bolder; color: white; background-color: rgb(214, 132, 0); width: 150px; padding: 12px; border: none; border-radius: 25px;">Book Now</button>
                 </form>
             </div>
             <div class="buy">
                 <div class="flex" style="gap: 55px;">
-                    <img src="../icons/help-icon.svg" alt="help-icon" style="position: relative; height: 40px; top: -10px; left: -5px;">
                     <p style="font-size: 20px; font-weight: 700; position: relative; top: -5px;">Need Help?</p>
                 </div>
-                <p style="position: relative; top: 14px; left: 5px;">Mail us at: <br> <?php echo htmlspecialchars($data['email']); ?></p>
+                <p style="position: relative; top: 14px; left: 5px;">Call us at: <br><?php echo htmlspecialchars($data['contact_number']); ?></p>
             </div>
         </div>
         <hr>
