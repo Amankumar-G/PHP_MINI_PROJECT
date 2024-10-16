@@ -6,6 +6,7 @@ session_start();
 include 'db.php'; // Make sure this points to your database connection file
 
 // Check if the form is submitted
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize and retrieve form data
     $name = $_POST['name'];

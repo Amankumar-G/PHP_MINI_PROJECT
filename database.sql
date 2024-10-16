@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS hospital (
     doctor_contact_number VARCHAR(15),
     doctor_email VARCHAR(100),
     image VARCHAR(255),
-    password VARCHAR(50)
+    password VARCHAR(100)
 );
 
 -- Insert sample data into the hospital table
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS patient (
     gender ENUM('Male', 'Female', 'Other'),
     contact_number VARCHAR(15),
     email VARCHAR(100),
-    password VARCHAR(50)
+    password VARCHAR(100)
 );
 
 -- Create the patient_report table if it does not exist
