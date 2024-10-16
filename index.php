@@ -28,7 +28,7 @@ $conn->close();
     <?php foreach ($alllistings as $listings): ?>
         <a href="/listings/<?php echo $listings['id']; ?>" class="listing-link">
             <div class="card listing-card col">
-                <img src="<?php echo $listings['image']; ?>" class="card-img-top" style="height: 20rem;" alt="listing_image">
+                <img src="https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg" class="card-img-top" style="height: 20rem;" alt="listing_image">
                 <div class="card-img-overlay">a</div>
                 <div class="card-body">
                     <p class="card-text">

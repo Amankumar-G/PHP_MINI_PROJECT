@@ -13,10 +13,10 @@
                 <a class="nav-link" href="new.php">Add Your Hospital</a>
                 <!-- < if(!currUser){ %> -->
                 <a class="nav-link " aria-current="page" href="signup.php">Sign Up</a>
-                <a class="nav-link" href="login">login</a>
+                <a class="nav-link" href="login.php">login</a>
                 <!-- <} %> -->
                 <!-- < if(currUser){ %> -->
-                <a class="nav-link" href="/logout">logout</a>
+                <a class="nav-link" href="logout.php">logout</a>
                 <!-- < } %> -->
             </div>
         </div>
