@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
-
+        
         if ($stmt->num_rows > 0) {
             // If the user exists, verify the password
             $stmt->bind_result($hashed_password);
