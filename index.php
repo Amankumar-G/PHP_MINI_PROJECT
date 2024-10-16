@@ -3,7 +3,7 @@
 ob_start();
 ?>
 
-    <h1>All listings</h1>
+    <h1>All Hospitals</h1>
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-3">
         <?php foreach ($alllistings as $listings): ?>
             <a href="/listings/<?php echo $listings['_id']; ?>" class="listing-link">
@@ -15,8 +15,7 @@ ob_start();
                         <p class="card-text">
                             <b>
                                 <?php echo $listings['title']; ?>
-                            </b> <br>
-                            &#8377; <?php echo number_format($listings['price'], 0, '', ','); ?>/night
+                            </b>
                         </p>
                     </div>
                 </div>

@@ -7,16 +7,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link" href="/listings">Explore</a>
+                <a class="nav-link" href="index.php">All Hospitals</a>
             </div>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/listings/new">Add new listing</a>
+                <a class="nav-link" href="new.php">Add Your Hospital</a>
                 <!-- < if(!currUser){ %> -->
-                <a class="nav-link " aria-current="page" href="/signup"><b>Sign Up</b></a>
-                <a class="nav-link" href="/login"><b>login</b></a>
+                <a class="nav-link " aria-current="page" href="signup.php">Sign Up</a>
+                <a class="nav-link" href="login">login</a>
                 <!-- <} %> -->
                 <!-- < if(currUser){ %> -->
-                <a class="nav-link" href="/logout"><b>logout</b></a>
+                <a class="nav-link" href="/logout">logout</a>
                 <!-- < } %> -->
             </div>
         </div>
