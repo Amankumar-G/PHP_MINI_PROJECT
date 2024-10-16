@@ -11,6 +11,7 @@
             </div>
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="new.php">Add Your Hospital</a>
+                <a class="nav-link" href="patient_profile.php">Profile</a>
                 <!-- < if(!currUser){ %> -->
                 <a class="nav-link " aria-current="page" href="signup.php">Sign Up</a>
                 <a class="nav-link" href="login.php">login</a>
