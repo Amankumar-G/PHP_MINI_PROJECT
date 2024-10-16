@@ -32,6 +32,7 @@ ob_start();
         <?php endforeach; ?>
         |
     </div>
+    <div>Hello</div>
 
 <div class="flex">
     <div>

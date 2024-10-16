@@ -17,13 +17,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Prepare an SQL statement
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = $conn->prepare("INSERT INTO hospital (hospital_name, email, contact_number, password, doctor_name, doctor_contact_number, doctor_email, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO patient (patient_name, age, gender, contact_number, email, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
     // Bind parameters (assuming doctor fields are placeholders, you can replace them)
     $doctor_name = $name; // Use patient's name as doctor name (or adjust as needed)
     $doctor_contact_number = $contact; // Use contact as doctor contact (or adjust as needed)
     $doctor_email = $email; // Use email as doctor email (or adjust as needed)
-    $image = 'default.jpg'; // Default image or handle image upload separately
+    $image = 'https://img.freepik.com/premium-vector/young-man-face-avater-vector-illustration-design_968209-13.jpg?w=740'
 
     // Set placeholder values for the doctor fields or adjust as necessary
     $stmt->bind_param("ssssssss", $name, $email, $contact, $password, $doctor_name, $doctor_contact_number, $doctor_email, $image);
