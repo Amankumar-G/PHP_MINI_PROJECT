@@ -18,7 +18,9 @@ ob_start(); // Start output buffering
         <img src="https://i.pinimg.com/236x/93/19/e4/9319e481be9ccc90416cbd1da1404274.jpg" alt="">
         </div>
         <div class="col-5 offset-5">
-         <h1></h1>
+         <h1>
+            <?php echo $row['patient_name'];?>
+         </h1>
         </div>
     </div>
 </body>
