@@ -1,48 +1,73 @@
 <?php
 // Start output buffering
-$id=$_GET['id'];
-$query=`SELECT*FROM hospital WHERE id="$id";`;
-$result=mysql_query($query,$conn);
-$row=mysql_fetch_array($result);
 ob_start();
+
+// Database connection (replace with your actual connection code)
+include 'db.php';
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Validate and get the 'id' from URL
+$id = isset($_GET['id']) && is_numeric($_GET['id']) ? intval($_GET['id']) : null;
+
+if ($id) {
+    // Prepare and execute the SQL query
+    $stmt = $conn->prepare("SELECT * FROM hospital WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_assoc();
+    } else {
+        echo "No data found for this ID.";
+        exit;
+    }
+    $stmt->close();
+} else {
+    echo "Invalid ID.";
+    exit;
+}
+
 ?>
 
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-        <div>
-            <h3 style="display: inline-block;margin-left: 20px; margin-top: 20px;">
-                <?php echo $data['destination']; ?> package
-            </h3>
-            <h6 style="display: inline-block;margin-left: 10px;"><?php echo $data['duration']; ?></h6>
-        </div>
-        <div>
-            <?php if ($currUser && $currUser['id'] == $data['owner']['id']): ?>
-                <form action="/edit/<?php echo $data['id']; ?>" style="display: inline-block;">
-                    <button style="border: none; margin-right:30px; margin-top: 20px; background-color: rgb(100, 100, 255); color: white; padding: 8px 15px; border-radius: 5px;">Edit</button>
-                </form>
-                <form action="/<?php echo $data['id']; ?>?_method=DELETE" method="post" style="display: inline-block;">
-                    <button style="border: none; margin-right:30px; margin-top: 20px; background-color: rgb(100, 100, 255); color: white; padding: 8px; border-radius: 5px;">Delete</button>
-                </form>
-            <?php endif; ?>
-        </div>
+<div style="display: flex; align-items: center; justify-content: space-between;">
+    <div>
+        <h3 style="display: inline-block;margin-left: 20px; margin-top: 20px;">
+            <?php echo htmlspecialchars($data['hospital_name']); ?>
+        </h3>
+        <h6 style="display: inline-block;margin-left: 10px;"><?php echo htmlspecialchars($data['']); ?></h6>
     </div>
+    <div>
+        <?php if (isset($currUser) && $currUser['id'] == $data['owner']['id']): ?>
+            <form action="/edit/<?php echo $data['id']; ?>" style="display: inline-block;">
+                <button style="border: none; margin-right:30px; margin-top: 20px; background-color: rgb(100, 100, 255); color: white; padding: 8px 15px; border-radius: 5px;">Edit</button>
+            </form>
+            <form action="/<?php echo $data['id']; ?>?_method=DELETE" method="post" style="display: inline-block;">
+                <button style="border: none; margin-right:30px; margin-top: 20px; background-color: rgb(100, 100, 255); color: white; padding: 8px; border-radius: 5px;">Delete</button>
+            </form>
+        <?php endif; ?>
+    </div>
+</div>
 
-    <div style="margin-left: 20px;">
-        <?php foreach ($data['placesIncludes'] as $element): ?>
-           | <?php echo $element; ?>
-        <?php endforeach; ?>
-        |
-    </div>
-    <div>Hello</div>
+<div style="margin-left: 20px;">
+    <?php foreach ($data['placesIncludes'] as $element): ?>
+       | <?php echo htmlspecialchars($element); ?>
+    <?php endforeach; ?>
+    |
+</div>
 
 <div class="flex">
     <div>
-        <img class="coverImg" src="<?php echo $data['image']; ?>" alt="image">
+        <img class="coverImg" src="<?php echo htmlspecialchars($data['image']); ?>" alt="image">
     </div>
     <div class="box-2">
         <div class="flex dibba" style="gap: 20px;">
             <div class="buy">
                 <div class="buyIn">
-                    <h2 style="display: inline-block; margin-left: 30px;">₹<?php echo $data['price']; ?></h2>
+                    <h2 style="display: inline-block; margin-left: 30px;">₹<?php echo htmlspecialchars($data['price']); ?></h2>
                     <p style="display: inline-block; margin-left: 5px; height: 10px; position: relative; bottom: 5px; left: 5px;">per person</p>
                 </div>
                 <hr style="width: 298px; position: relative; left: -20px; bottom: 3px;">
@@ -55,7 +80,7 @@ ob_start();
                     <img src="../icons/help-icon.svg" alt="help-icon" style="position: relative; height: 40px; top: -10px; left: -5px;">
                     <p style="font-size: 20px; font-weight: 700; position: relative; top: -5px;">Need Help?</p>
                 </div>
-                <p style="position: relative; top: 14px; left: 5px;">Mail us at: <br> <?php echo $data['owner']['email']; ?></p>
+                <p style="position: relative; top: 14px; left: 5px;">Mail us at: <br> <?php echo htmlspecialchars($data['owner']['email']); ?></p>
             </div>
         </div>
         <hr>
@@ -96,9 +121,9 @@ ob_start();
         <?php foreach ($data['review'] as $element): ?>
             <div class="col-4">
                 <div style="width: 75%; border-radius: 20px; border: none; background-color: gainsboro; padding-top: 20px; padding-bottom: 5px; padding-left: 25px; margin: 20px 0px;">
-                    <p>@<?php echo $element['username']; ?></p>
-                    <p class="starability-result" data-rating="<?php echo $element['rating']; ?>"></p>
-                    <p><?php echo $element['comment']; ?></p>
+                    <p>@<?php echo htmlspecialchars($element['username']); ?></p>
+                    <p class="starability-result" data-rating="<?php echo htmlspecialchars($element['rating']); ?>"></p>
+                    <p><?php echo htmlspecialchars($element['comment']); ?></p>
                     <?php if ($currUser && $currUser['id'] == $element['owner']): ?>
                         <form action="/review/<?php echo $data['id']; ?>/<?php echo $element['id']; ?>?_method=DELETE" method="post">
                             <button style="border: none; margin-right:30px; margin-bottom: 18px; background-color: rgb(100, 100, 255); color: white; padding: 8px; border-radius: 5px;">Delete</button>
@@ -118,4 +143,7 @@ $content = ob_get_clean();
 
 // Include the general layout from the same folder
 include 'boilerplate.php';
+
+// Close the database connection
+$conn->close();
 ?>
