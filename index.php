@@ -1,27 +1,46 @@
 <?php
 // Start output buffering
 ob_start();
+
+// Include the database connection
+include 'db.php';
+
+// Query to fetch all hospital records
+$sql = "SELECT * FROM hospital";
+$result = $conn->query($sql);
+
+$alllistings = [];
+if ($result->num_rows > 0) {
+    // Fetch all records as an associative array
+    while($row = $result->fetch_assoc()) {
+        $alllistings[] = $row;
+    }
+} else {
+    echo "No records found.";
+}
+
+// Close the database connection
+$conn->close();
 ?>
 
-    <h1>All Hospitals</h1>
-    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-3">
-        <?php foreach ($alllistings as $listings): ?>
-            <a href="/listings/<?php echo $listings['_id']; ?>" class="listing-link">
-                <div class="card listing-card col">
-                    <img src="<?php echo $listings['image']; ?>" class="card-img-top" style="height: 20rem;"
-                        alt="listing_image">
-                        <div class="card-img-overlay">a</div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            <b>
-                                <?php echo $listings['title']; ?>
-                            </b>
-                        </p>
-                    </div>
+<h1>All Hospitals</h1>
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-3">
+    <?php foreach ($alllistings as $listings): ?>
+        <a href="/listings/<?php echo $listings['id']; ?>" class="listing-link">
+            <div class="card listing-card col">
+                <img src="<?php echo $listings['image']; ?>" class="card-img-top" style="height: 20rem;" alt="listing_image">
+                <div class="card-img-overlay">a</div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <b>
+                            <?php echo htmlspecialchars($listings['hospital_name']); ?>
+                        </b>
+                    </p>
                 </div>
-            </a>
-        <?php endforeach; ?>
-    </div>
+            </div>
+        </a>
+    <?php endforeach; ?>
+</div>
 
 <?php
 // Capture the content in a variable
