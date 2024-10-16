@@ -6,7 +6,7 @@ include 'db.php'; // Ensure this points to your database connection file
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
     $role = $_POST['role']; // Get the selected role
 
@@ -14,10 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Determine the SQL statement and the redirect based on the role
     if ($role == 'hospital') {
-        // Check if the user is a hospital admin
         $stmt = $conn->prepare("SELECT password FROM hospital WHERE email = ?");
     } elseif ($role == 'patient') {
-        // Check if the user is a patient
         $stmt = $conn->prepare("SELECT password FROM patient WHERE email = ?");
     } else {
         $error = "Please select a valid role.";
@@ -27,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
-        
+
         if ($stmt->num_rows > 0) {
             // If the user exists, verify the password
             $stmt->bind_result($hashed_password);
@@ -54,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     }
 
+    // Close the database connection
     $conn->close();
 }
 ?>
@@ -64,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="col-6 offset-3">
             <?php if (isset($error)): ?>
                 <div class="alert alert-danger" role="alert">
-                    <?= $error ?>
+                    <?= htmlspecialchars($error) ?>
                 </div>
             <?php endif; ?>
             <form action="login.php" method="POST" class="needs-validation" novalidate>
@@ -77,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="email" class="form-label">email</label>
+                    <label for="email" class="form-label">Email</label>
                     <input name="email" type="text" placeholder="Enter email" id="email" class="form-control" required>
                 </div>
                 <div class="mb-3">

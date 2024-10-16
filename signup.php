@@ -1,5 +1,4 @@
 <?php
-// Start session for error handling (optional)
 session_start();
 
 // Include the database connection
@@ -9,35 +8,43 @@ include 'db.php'; // Make sure this points to your database connection file
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize and retrieve form data
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $contact = $_POST['contact'];
+    $name = trim($_POST['name']);
+    $email = trim($_POST['email']);
+    $contact = trim($_POST['contact']);
     $password = $_POST['password']; // Consider hashing the password
     $age = $_POST['age'];
     $gender = $_POST['gender'];
 
-    // Prepare an SQL statement
+    // Hash the password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt = $conn->prepare("INSERT INTO patient (patient_name, age, gender, contact_number, email, password) VALUES (?, ?, ?, ?, ?, ?)");
+    // Check if the email already exists
+    $checkStmt = $conn->prepare("SELECT email FROM patient WHERE email = ?");
+    $checkStmt->bind_param("s", $email);
+    $checkStmt->execute();
+    $checkStmt->store_result();
 
-
-    // Set placeholder values for the doctor fields or adjust as 
-    // Change this line
-    $stmt->bind_param("ssssss", $name, $age, $gender, $contact, $email, $hashed_password);
-
-
-    // Execute the statement and check for success
-    if ($stmt->execute()) {
-        echo "Sign-up successful!";
+    if ($checkStmt->num_rows > 0) {
+        $error = "Email already in use!";
     } else {
-        echo "Error: " . $stmt->error;
+        // Prepare an SQL statement for inserting a new user
+        $stmt = $conn->prepare("INSERT INTO patient (patient_name, age, gender, contact_number, email, password) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $name, $age, $gender, $contact, $email, $hashed_password);
+
+        // Execute the statement and check for success
+        if ($stmt->execute()) {
+            echo "Sign-up successful!";
+            // Optionally redirect or set a success session variable here
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+
+        // Close statement
+        $stmt->close();
     }
 
-    // Close statement
-    $stmt->close();
-
     // Close the database connection
+    $checkStmt->close();
     $conn->close();
 }
 ?>
