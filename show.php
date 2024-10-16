@@ -1,5 +1,9 @@
 <?php
 // Start output buffering
+$id=$_GET['id'];
+$query=`SELECT*FROM hospital WHERE id="$id";`;
+$result=mysql_query($query,$conn);
+$row=mysql_fetch_array($result);
 ob_start();
 ?>
 
