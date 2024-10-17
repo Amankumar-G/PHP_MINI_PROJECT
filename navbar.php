@@ -23,7 +23,10 @@ if (session_status() === PHP_SESSION_NONE) {
                 <?php else: ?>
                     <!-- If the user is logged in, show options based on their role -->
                     <?php if ($_SESSION['user_role'] === 'patient'): ?>
-                        <a class="nav-link" href="patient_profile.php">Patient Profile</a>
+                        <?php if ($_SESSION['email'] === 'admin@gmail.com'): ?>
+                            <a class="nav-link" href="admin.php">Admin Profile</a>
+                            <?php endif; ?>    
+                            <a class="nav-link" href="patient_profile.php">Patient Profile</a>
                     <?php elseif ($_SESSION['user_role'] === 'hospital'): ?>
                         <a class="nav-link" href="hospital_profile.php">Hospital Profile</a>
                     <?php endif; ?>

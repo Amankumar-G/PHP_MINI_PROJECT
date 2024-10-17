@@ -24,12 +24,12 @@ $conn->close();
 ?>
 
 <h1>All Hospitals</h1>
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-3">
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-3 g-4"> <!-- Added 'g-4' for spacing -->
     <?php foreach ($alllistings as $listings): ?>
+        <?php if($listings['verified']==1): ?>
         <a href="show.php?id=<?php echo $listings['id']; ?>" class="listing-link">
-            <div class="card listing-card col">
-                <img src="https://img.freepik.com/free-vector/people-walking-sitting-hospital-building-city-clinic-glass-exterior-flat-vector-illustration-medical-help-emergency-architecture-healthcare-concept_74855-10130.jpg" class="card-img-top" style="height: 20rem;" alt="listing_image">
-                <div class="card-img-overlay">a</div>
+            <div class="card listing-card">
+                <img src="<?php echo htmlspecialchars($listings['image']); ?>" class="card-img-top" style="height: 20rem; object-fit: cover;" alt="Listing Image"> <!-- Used object-fit to ensure proper image scaling -->
                 <div class="card-body">
                     <p class="card-text">
                         <b>
@@ -39,8 +39,10 @@ $conn->close();
                 </div>
             </div>
         </a>
+        <?php endif; ?>
     <?php endforeach; ?>
 </div>
+
 
 <?php
 // Capture the content in a variable

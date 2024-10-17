@@ -22,10 +22,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Handle image upload
     $image = '';
-    if (isset($_FILES['name']['image']) && $_FILES['error']['image'] == 0) {
-        $image = $_FILES['name']['image'];
-        $upload_dir = 'uploads/'; // Ensure this directory exists and is writable
-        move_uploaded_file($_FILES['tmp_name']['image'], $upload_dir . $image);
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $image = $_FILES['image']['name']; // Get the original file name
+        $upload_dir = 'uploads/hospital_img/'; // Ensure this directory exists and is writable
+
+        // Create a unique file name to avoid conflicts
+        $imagePath = $upload_dir . uniqid('', true) . '-' . basename($image);
+
+        // Move the uploaded file to the destination directory
+        if (!move_uploaded_file($_FILES['image']['tmp_name'], $imagePath)) {
+            echo "Error moving the uploaded file.";
+        }
     }
 
     // Prepare an SQL statement
@@ -33,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Bind parameters
     // Use the receptionist's information as placeholders for the doctor's fields
-    $stmt->bind_param("ssssssssss", $hospital_name, $address, $zip_code, $contact_number, $email, $receptionist_name, $receptionist_contact, $email, $image, $hashed_password);
+    $stmt->bind_param("ssssssssss", $hospital_name, $address, $zip_code, $contact_number, $email, $receptionist_name, $receptionist_contact, $email, $imagePath, $hashed_password);
 
     // Execute the statement and check for success
     if ($stmt->execute()) {

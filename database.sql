@@ -65,3 +65,7 @@ CREATE TABLE appointments (
     contact_number VARCHAR(20) NOT NULL,
     reason TEXT NOT NULL
 );
+
+
+ALTER TABLE hospital
+ADD verified BOOLEAN DEFAULT FALSE;
