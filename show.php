@@ -12,8 +12,59 @@ if ($conn->connect_error) {
 // Validate and get the 'id' from URL
 $id = isset($_GET['id']) && is_numeric($_GET['id']) ? intval($_GET['id']) : null;
 
+// Fetch current token number for this hospital
+$token_stmt = $conn->prepare("SELECT current_token FROM hospital WHERE id = ?");
+$token_stmt->bind_param("i", $id);
+$token_stmt->execute();
+$token_result = $token_stmt->get_result();
+$token_data = $token_result->fetch_assoc();
+
+if (!$token_data) {
+    echo "No data found for this ID.";
+    exit;
+}
+
+$current_token = $token_data['current_token'] + 1; // Use the current token as-is
+$token_stmt->close();
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_appointment'])) {
+    // Sanitize and retrieve form data
+    $patient_name = trim($_POST['patient_name']);
+    $age = intval($_POST['age']);  // Ensure age is an integer
+    $email = trim($_POST['email']);
+    $contact_number = trim($_POST['contact_number']);
+    $reason = trim($_POST['reason']);
+
+    // Prepare an SQL statement for inserting a new appointment with the token number
+    $stmt = $conn->prepare("INSERT INTO appointments (patient_name, age, email, contact_number, reason, token_number, hospital_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssii", $patient_name, $age, $email, $contact_number, $reason, $current_token, $id);
+
+    // Execute the statement and check for success
+    if ($stmt->execute()) {
+        echo "Appointment booked successfully! Your Token Number is " . $current_token;
+
+        // Increment the current token count in the hospital table
+        $new_token = $current_token;
+        $up_stmt = $conn->prepare("UPDATE hospital SET current_token = ? WHERE id = ?");
+        $up_stmt->bind_param("ii", $new_token, $id);
+        if (!$up_stmt->execute()) {
+            echo "Error updating token: " . $up_stmt->error;
+        }
+        $up_stmt->close();
+
+        // Redirect or refresh to show updated token
+        header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $id);
+        exit;
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+    // Close statement
+    $stmt->close();
+}
+
 if ($id) {
-    // Prepare and execute the SQL query
+    // Prepare and execute the SQL query to fetch hospital data
     $stmt = $conn->prepare("SELECT * FROM hospital WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
@@ -30,32 +81,8 @@ if ($id) {
     echo "Invalid ID.";
     exit;
 }
-
-// Check if the form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_appointment'])) {
-    // Sanitize and retrieve form data
-    $patient_name = trim($_POST['patient_name']);
-    $age = $_POST['age'];
-    $email = trim($_POST['email']);
-    $contact_number = trim($_POST['contact_number']);
-    $reason = trim($_POST['reason']);
-
-    // Prepare an SQL statement for inserting a new appointment
-    $stmt = $conn->prepare("INSERT INTO appointments (patient_name, age, email, contact_number, reason) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $patient_name, $age, $email, $contact_number, $reason);
-
-    // Execute the statement and check for success
-    if ($stmt->execute()) {
-        echo "Appointment booked successfully!";
-        // Optionally redirect or set a success session variable here
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-
-    // Close statement
-    $stmt->close();
-}
 ?>
+
 
 <div style="display: flex; align-items: center; justify-content: space-between;">
     <div>
@@ -63,9 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_appointment'])) {
             <?php echo htmlspecialchars($data['hospital_name']); ?>
         </h3>
     </div>
-    <!-- <div> -->
-        <!-- Code for edit And delete button -->
-    <!-- </div> -->
 </div>
 
 <div class="flex">
@@ -74,29 +98,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_appointment'])) {
     </div>
     <div class="box-2">
         <div class="flex dibba" style="gap: 20px;">
-            <div class="buy middle" >
-                <div style="display: flex; justify-content: center; flex-direction:column">    
-                <p>Current Token Number</p>
-                <div class="flex" style="gap: 30px;">
-                <h1 style="width: 17vw; text-align: center">90</h1>
+            <div class="buy middle">
+                <div style="display: flex; justify-content: center; flex-direction:column">
+                    <p>Current token Number</p>
+                    <div class="flex" style="justify-content: center;">
+                        <!-- You can add other content here -->
+                         <h1><?php echo htmlspecialchars($data['current_token']) ?></h1>
+                    </div>
                 </div>
-                </div>
-                <button class="form-control out" style="text-align: center; font-weight: bolder; color: white; background-color: rgb(214, 132, 0); width: 100%; padding: 8px; border: none; border-radius: 25px; margin-top: 5px;" data-toggle="modal" data-target="#bookNow">Book Now</button>
-                
+                <button class="form-control out" style="text-align: center; font-weight: bolder; color: white; background-color: rgb(214, 132, 0); width: 100%; padding: 8px; border: none; border-radius: 25px; margin-top: 8px;" data-toggle="modal" data-target="#bookNow">Book Now</button>
             </div>
             <div class="buy">
                 <div class="flex" style="gap: 55px;">
                     <p style="font-size: 20px; font-weight: 700; position: relative; top: -5px;">Need Help?</p>
                 </div>
                 <p style="position: relative; top: 14px; left: 5px;">Call us at: <br><?php echo htmlspecialchars($data['contact_number']); ?></p>
-            </div>         
+            </div>
         </div>
         <hr>
         <?php include 'details.php'; ?>
     </div>
 </div>
-
-
 
 <div class="modal fade" id="bookNow" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
