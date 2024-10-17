@@ -29,6 +29,7 @@ if (session_status() === PHP_SESSION_NONE) {
                             <a class="nav-link" href="patient_profile.php">Patient Profile</a>
                     <?php elseif ($_SESSION['user_role'] === 'hospital'): ?>
                         <a class="nav-link" href="hospital_profile.php">Hospital Profile</a>
+                        <a class="nav-link" href="patient_details.php">Patient Details</a>
                     <?php endif; ?>
                     <a class="nav-link" href="logout.php">Logout</a>
                 <?php endif; ?>
