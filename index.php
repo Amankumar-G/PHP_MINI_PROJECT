@@ -26,6 +26,7 @@ $conn->close();
 <h1>All Hospitals</h1>
 <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-3 g-4"> <!-- Added 'g-4' for spacing -->
     <?php foreach ($alllistings as $listings): ?>
+        <?php if($listings['verified']==1): ?>
         <a href="show.php?id=<?php echo $listings['id']; ?>" class="listing-link">
             <div class="card listing-card">
                 <img src="<?php echo htmlspecialchars($listings['image']); ?>" class="card-img-top" style="height: 20rem; object-fit: cover;" alt="Listing Image"> <!-- Used object-fit to ensure proper image scaling -->
@@ -38,6 +39,7 @@ $conn->close();
                 </div>
             </div>
         </a>
+        <?php endif; ?>
     <?php endforeach; ?>
 </div>
 
