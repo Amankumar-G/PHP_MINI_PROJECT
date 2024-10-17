@@ -1,6 +1,8 @@
 <?php
 // Start session for error handling (optional)
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Include the database connection
 include 'db.php'; // Make sure this points to your database connection file
@@ -50,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <br>
 <div class="row">
     <div class="col-8 offset-2">
-        <h3>Create New s!</h3>
+        <h3>Create New Hospital!</h3>
         <form method="POST" action="new.php" novalidate class="needs-validation" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="hospital_name" class="form-label">Hospital Name</label>

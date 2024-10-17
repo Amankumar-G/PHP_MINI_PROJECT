@@ -1,6 +1,8 @@
 <?php 
 ob_start();
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include 'db.php'; // Ensure this file connects to your database
 
 // Check if the user is logged in

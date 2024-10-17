@@ -30,6 +30,31 @@ if ($id) {
     echo "Invalid ID.";
     exit;
 }
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_appointment'])) {
+    // Sanitize and retrieve form data
+    $patient_name = trim($_POST['patient_name']);
+    $age = $_POST['age'];
+    $email = trim($_POST['email']);
+    $contact_number = trim($_POST['contact_number']);
+    $reason = trim($_POST['reason']);
+
+    // Prepare an SQL statement for inserting a new appointment
+    $stmt = $conn->prepare("INSERT INTO appointments (patient_name, age, email, contact_number, reason) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $patient_name, $age, $email, $contact_number, $reason);
+
+    // Execute the statement and check for success
+    if ($stmt->execute()) {
+        echo "Appointment booked successfully!";
+        // Optionally redirect or set a success session variable here
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    // Close statement
+    $stmt->close();
+}
 ?>
 
 <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -50,22 +75,70 @@ if ($id) {
     <div class="box-2">
         <div class="flex dibba" style="gap: 20px;">
             <div class="buy middle" >
-                <form action="/book/<?php echo $data['id']; ?>" style="display: flex; justify-content: center;">
-                    <button class="form-control out" style="text-align: center; font-weight: bolder; color: white; background-color: rgb(214, 132, 0); width: 150px; padding: 12px; border: none; border-radius: 25px;">Book Now</button>
-                </form>
+                <div style="display: flex; justify-content: center; flex-direction:column">    
+                <p>Current Token Number</p>
+                <div class="flex" style="gap: 30px;">
+                <h1 style="width: 17vw; text-align: center">90</h1>
+                </div>
+                </div>
+                <button class="form-control out" style="text-align: center; font-weight: bolder; color: white; background-color: rgb(214, 132, 0); width: 100%; padding: 8px; border: none; border-radius: 25px; margin-top: 5px;" data-toggle="modal" data-target="#bookNow">Book Now</button>
+                
             </div>
             <div class="buy">
                 <div class="flex" style="gap: 55px;">
                     <p style="font-size: 20px; font-weight: 700; position: relative; top: -5px;">Need Help?</p>
                 </div>
                 <p style="position: relative; top: 14px; left: 5px;">Call us at: <br><?php echo htmlspecialchars($data['contact_number']); ?></p>
-            </div>
+            </div>         
         </div>
         <hr>
         <?php include 'details.php'; ?>
     </div>
 </div>
 
+
+
+<div class="modal fade" id="bookNow" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Book Appointment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="">
+                <div class="modal-body">
+                    <input type="hidden" name="book_appointment" value="1">
+                    <div class="form-group">
+                        <label for="patient_name">Name</label>
+                        <input type="text" class="form-control" name="patient_name" id="patient_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" class="form-control" name="age" id="age" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact_number">Contact Number</label>
+                        <input type="text" class="form-control" name="contact_number" id="contact_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reason">Reason for Appointment</label>
+                        <textarea class="form-control" name="reason" id="reason" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Book Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <?php
 // Capture the content in a variable

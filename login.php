@@ -1,6 +1,7 @@
 <?php
-session_start();
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Include the database connection
 include 'db.php'; // Ensure this points to your database connection file
 
@@ -10,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $role = $_POST['role']; // Get the selected role
 
-    $isLoggedIn = false;
+    $_SESSION['isLoggedIn'] = false;
 
     // Determine the SQL statement and the redirect based on the role
     if ($role == 'hospital') {
@@ -32,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->fetch();
 
             if (password_verify($password, $hashed_password)) {
-                $isLoggedIn = true;
+                $_SESSION['isLoggedIn'] = true;
                 $_SESSION['user_role'] = $role; // Set the user role in session
                 $_SESSION['email'] = $email;
                 // Redirect based on role
