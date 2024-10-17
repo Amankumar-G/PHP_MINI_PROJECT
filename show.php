@@ -94,7 +94,7 @@ if ($id) {
 
 <div class="flex">
     <div>
-        <img class="coverImg" src="https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aG9zcGl0YWx8ZW58MHx8MHx8fDA%3D" alt="image">
+        <img class="coverImg" src="<?php echo htmlspecialchars($data['image']); ?>" alt="image">
     </div>
     <div class="box-2">
         <div class="flex dibba" style="gap: 20px;">
