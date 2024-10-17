@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="row mt-3">
     <h1 class="col-6 offset-3 mb-3">Sign Up</h1>
     <div class="col-6 offset-3">
-        <form action="signup.php" method="POST" class="needs-validation" novalidate>
+        <form action="signup.php" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
                 <input name="name" type="text" placeholder="Enter your name" id="name" class="form-control" required>
@@ -85,6 +85,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="female">Female</option>
                     <option value="other">Other</option>
                 </select>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Image</label>
+                <input name="image" type="file" class="form-control">
             </div>
             <button class="btn btn-outline-dark mt-3">Sign Up</button>
         </form><br><br>
