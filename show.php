@@ -141,10 +141,6 @@ if ($id) {
                         <input type="number" class="form-control" name="age" id="age" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" name="email" id="email" required>
-                    </div>
-                    <div class="form-group">
                         <label for="contact_number">Contact Number</label>
                         <input type="text" class="form-control" name="contact_number" id="contact_number" required>
                     </div>

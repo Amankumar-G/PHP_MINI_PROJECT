@@ -47,6 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // If no match is found or password verification fails
+        
         $error = "Invalid email or password!";
         
         // Close the statement
