@@ -120,7 +120,7 @@ if ($stmt) {
                         <h2 class="text-center">Hospital Profile</h2>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <img src="https://kdhospital.co.in/assets/images/patients_care_services/visiting_guidelines_for_intensive_care_units.jpg" class="img-fluid profile-image rounded" alt="Hospital Image">
+                                <img src="<?php echo $row['image'];?>" class="img-fluid profile-image rounded" alt="Hospital Image">
                             </div>
                             <div class="col-md-6 profile-details">
                                 <h3>Hospital: <strong><?php echo htmlspecialchars($row['hospital_name']); ?></strong></h3>

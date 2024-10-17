@@ -86,10 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="other">Other</option>
                 </select>
             </div>
-            <div class="mb-3">
-                <label for="image" class="form-label">Image</label>
-                <input name="image" type="file" class="form-control">
-            </div>
             <button class="btn btn-outline-dark mt-3">Sign Up</button>
         </form><br><br>
     </div>

@@ -179,7 +179,7 @@ if ($stmt) {
                         <div class="d-flex justify-content-center mt-4 padding">
                             <form method="POST" action="" class="mr-2 ">
                                 <input type="hidden" name="delete_profile" value="1">
-                                <button type="submit" class="btn btn-danger margin-right ">DELETE</button>
+                                <button type="submit" class="btn btn-danger margin-right " onclick="return confirm('Are you sure you want to delete this hospital?');">DELETE</button>
                             </form>
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">EDIT</button>
                         </div>
