@@ -127,134 +127,218 @@ if ($stmt) {
 
     if ($row = $result->fetch_assoc()) {
 ?>
-    <?php if (isset($error)) { ?>
-            <div class="alert alert-danger alert-dismissible mt-3"><?php echo $error; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <?php } ?>
 
-        <?php if (isset($success)) { ?>
-            <div class="alert alert-success alert-dismissible mt-3"><?php echo $success; ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <?php } ?>
+    <style>
+        .fixed-sidebar {
+            position: sticky;
+            top: 0;
+            height: 80vh; /* Full viewport height */
+            overflow-y: auto; /* Allow scrolling */
+        }
+
+        .scrollable-container {
+            max-height: 80vh; /* Limit height for scrolling */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-container {
+            height:40vh;
+            max-height: 50vh; /* Set height for each table's scrollable area */
+            overflow-y: auto; /* Enable vertical scrolling */
+            margin-bottom: 20px; /* Space between tables */
+            border: 1px solid #dee2e6; /* Optional: Add border for separation */
+            border-radius: 5px; /* Optional: Add rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
+        }
+
+        .table {
+            margin-bottom: 0; /* Remove default bottom margin of the table */
+        }
+    </style>
+
     <div class="container mt-5">
-        <div class="card text-center">
-            <div class="card-body">
-                <img src="https://i.pinimg.com/236x/93/19/e4/9319e481be9ccc90416cbd1da1404274.jpg" alt="Profile Image" class="rounded-circle img-fluid mb-3" width="150">
-                <h3><?php echo htmlspecialchars($row['patient_name']); ?></h3>
-                <p><strong>Age:</strong> <?php echo htmlspecialchars($row['age']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($row['email']); ?></p>
-                <p><strong>Contact No:</strong> <?php echo htmlspecialchars($row['contact_number']); ?></p>
+        <div class="row">
+            <div class="col-lg-4 col-md-12 fixed-sidebar">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <img src="https://i.pinimg.com/236x/93/19/e4/9319e481be9ccc90416cbd1da1404274.jpg" alt="Profile Image" class="rounded-circle img-fluid mb-3" width="150">
+                        <h3><?php echo htmlspecialchars($row['patient_name']); ?></h3>
+                        <p><strong>Age:</strong> <?php echo htmlspecialchars($row['age']); ?></p>
+                        <p><strong>Email:</strong> <?php echo htmlspecialchars($row['email']); ?></p>
+                        <p><strong>Contact No:</strong> <?php echo htmlspecialchars($row['contact_number']); ?></p>
+                        <div class="d-flex justify-content-center mt-4">
+                            <form method="POST" action="" class="mr-2">
+                                <input type="hidden" name="delete_profile" value="1">
+                                <button type="submit" class="btn btn-danger">DELETE</button>
+                            </form>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">EDIT</button>
+                        </div>
+                    </div>
+                </div>
 
-                <div class="d-flex justify-content-center mt-4">
-                    <form method="POST" action="" class="mr-3">
-                        <input type="hidden" name="delete_profile" value="1">
-                        <button type="submit" class="btn btn-danger">DELETE</button>
-                    </form>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">EDIT</button>
+                <div class="card shadow-sm mt-4">
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Upload Medical Report</h4>
+                        <form method="POST" action="" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="report_file">Upload Medical Report (PDF):</label>
+                                <input type="file" class="form-control-file" name="report_file" id="report_file" accept=".pdf" required>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success">Upload Report</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-md-12">
+                <div class="scrollable-container">
+                    <!-- Appointments Table -->
+                    <div class="table-container card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Your Appointments</h4>
+                            <div class="table-responsive">
+                                <?php
+                                $query = "SELECT * FROM appointments WHERE email = ?";
+                                $tmt = $conn->prepare($query);
+                                $tmt->bind_param("s", $email);
+                                $tmt->execute();
+                                $result_app = $tmt->get_result();
+
+                                if ($result_app->num_rows > 0) {
+                                    echo "<table class='table table-bordered text-center'>";
+                                    echo "<thead><tr><th>Token Number</th><th>Hospital Name</th></tr></thead><tbody>";
+
+                                    // Loop through each appointment
+                                    while ($row_app = $result_app->fetch_assoc()) {
+                                        $hos_id = $row_app['hospital_id'];
+
+                                        // Query for hospital data
+                                        $query_hos = "SELECT * FROM hospital WHERE id = ?";
+                                        $htmt = $conn->prepare($query_hos);
+                                        $htmt->bind_param("s", $hos_id);
+                                        $htmt->execute();
+                                        $result_hos = $htmt->get_result();
+                                        $row_hos = $result_hos->fetch_assoc(); // Get hospital details
+
+                                        echo "<tr>";
+                                        echo "<td>" . htmlspecialchars($row_app['token_number']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row_hos['hospital_name']) . "</td>";
+                                        echo "</tr>";
+
+                                        $htmt->close();
+                                    }
+                                    echo "</tbody></table>";
+                                } else {
+                                    echo "<p>No appointments found.</p>";
+                                }
+                                $tmt->close();
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Uploaded Reports Table -->
+                    <div class="table-container card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Uploaded Reports</h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center">
+                                    <thead>
+                                        <tr>
+                                            <th>Report ID</th>
+                                            <th>File Name</th>
+                                            <th>Upload Date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $reportsQuery = "SELECT * FROM patient_report WHERE patient_id = (SELECT id FROM patient WHERE email = ?)";
+                                        $reportsStmt = $conn->prepare($reportsQuery);
+                                        $reportsStmt->bind_param("s", $email);
+                                        $reportsStmt->execute();
+                                        $reportsResult = $reportsStmt->get_result();
+                                        while ($reportRow = $reportsResult->fetch_assoc()) {
+                                            $filePath = $reportRow['report_file'];
+                                            $fileName = basename($filePath);
+                                            echo '<tr>';
+                                            echo '<td>' . htmlspecialchars($reportRow['report_id']) . '</td>';
+                                            echo '<td>' . htmlspecialchars($fileName) . '</td>';
+                                            echo '<td>' . htmlspecialchars($reportRow['report_date']) . '</td>';
+                                            echo '<td class="text-center"><a href="' . htmlspecialchars($reportRow['report_file']) . '" target="_blank" class="btn btn-info">View</a></td>';
+                                            echo '</tr>';
+                                        }
+                                        $reportsStmt->close();
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Edit Modal -->
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel">Edit Profile</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form method="POST" action="">
-                        <div class="modal-body">
-                            <input type="hidden" name="edit_profile" value="1">
-                            <div class="form-group">
-                                <label for="patient_name">Name</label>
-                                <input type="text" class="form-control" name="patient_name" id="patient_name" value="<?php echo htmlspecialchars($row['patient_name']); ?>" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="age">Age</label>
-                                <input type="number" class="form-control" name="age" id="age" value="<?php echo htmlspecialchars($row['age']); ?>" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" name="email" id="email" value="<?php echo htmlspecialchars($row['email']); ?>" disabled required>
-                            </div>
-                            <div class="form-group">
-                                <label for="contact_number">Contact Number</label>
-                                <input type="text" class="form-control" name="contact_number" id="contact_number" value="<?php echo htmlspecialchars($row['contact_number']); ?>" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-        </div>
-
-        <!-- Upload Report -->
-        <div class="card mt-4">
-            <div class="card-body">
-                <form method="POST" action="" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="report_file">Upload Medical Report (PDF):</label>
-                        <input type="file" class="form-control-file" name="report_file" id="report_file" accept=".pdf" required>
+                <form method="POST" action="">
+                    <div class="modal-body">
+                        <input type="hidden" name="edit_profile" value="1">
+                        <div class="form-group">
+                            <label for="patient_name">Name</label>
+                            <input type="text" class="form-control" name="patient_name" id="patient_name" value="<?php echo htmlspecialchars($row['patient_name']); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" class="form-control" name="age" id="age" value="<?php echo htmlspecialchars($row['age']); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" id="email" value="<?php echo htmlspecialchars($row['email']); ?>" disabled required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact_number">Contact Number</label>
+                            <input type="text" class="form-control" name="contact_number" id="contact_number" value="<?php echo htmlspecialchars($row['contact_number']); ?>" required>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-success">Upload Report</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
                 </form>
             </div>
         </div>
-
-        <!-- Display Reports -->
-        <div class="card mt-4">
-            <div class="card-body">
-                <h4 class="card-title">Your Medical Reports</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Report Id</th>
-                            <th scope="col">Report Name</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">View</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $reportsQuery = "SELECT * FROM patient_report WHERE patient_id = ?";
-                        $reportsStmt = $conn->prepare($reportsQuery);
-
-                        if ($reportsStmt) {
-                            $reportsStmt->bind_param("i", $row['id']);
-                            $reportsStmt->execute();
-                            $reportsResult = $reportsStmt->get_result();
-                            while ($reportRow = $reportsResult->fetch_assoc()) {
-                                $filePath = $reportRow['report_file'];
-                                $fileName = basename($filePath);
-                                echo '<tr>';
-                                echo '<td>' . htmlspecialchars($reportRow['report_id']) . '</td>';
-                                echo '<td>' . htmlspecialchars($fileName) . '</td>';
-                                echo '<td>' . htmlspecialchars($reportRow['report_date']) . '</td>';
-                                echo '<td><a href="' . htmlspecialchars($reportRow['report_file']) . '" target="_blank" class="btn btn-info">View</a></td>';
-                                echo '</tr>';
-                            }
-
-                            $reportsStmt->close();
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Display error or success message -->
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Display error or success message -->
+    <?php if (isset($error)) { ?>
+        <div class="alert alert-danger alert-dismissible mt-3"><?php echo $error; ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php } ?>
+
+    <?php if (isset($success)) { ?>
+        <div class="alert alert-success alert-dismissible mt-3"><?php echo $success; ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php } ?>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php
     } else {
