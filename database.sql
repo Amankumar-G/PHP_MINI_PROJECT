@@ -55,3 +55,13 @@ VALUES ('John Doe', 35, 'Male', '1234567890', 'john.doe@example.com', 'john');  
 -- Insert a report for this patient (assuming patient_id = 1)
 INSERT INTO patient_report (patient_id, report_file, report_date)
 VALUES (1, 'report1.pdf', '2024-10-16');
+
+-- New Table
+CREATE TABLE appointments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_name VARCHAR(255) NOT NULL,
+    age INT NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    contact_number VARCHAR(20) NOT NULL,
+    reason TEXT NOT NULL
+);
