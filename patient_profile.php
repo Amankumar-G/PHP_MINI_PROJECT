@@ -171,7 +171,7 @@ if ($stmt) {
             <div class="col-lg-4 col-md-12 fixed-sidebar">
                 <div class="card shadow-sm ">
                     <div class="card-body text-center">
-                        <img src="https://i.pinimg.com/236x/93/19/e4/9319e481be9ccc90416cbd1da1404274.jpg" alt="Profile Image" class="rounded-circle img-fluid mb-3" width="150">
+                        <img src="./public/profile.jpg" width="150">
                         <h3><?php echo htmlspecialchars($row['patient_name']); ?></h3>
                         <p><strong>Age:</strong> <?php echo htmlspecialchars($row['age']); ?></p>
                         <p><strong>Email:</strong> <?php echo htmlspecialchars($row['email']); ?></p>
