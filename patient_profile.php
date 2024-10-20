@@ -129,15 +129,24 @@ if ($stmt) {
 ?>
 
     <style>
+        .padding{
+            padding:1rem;
+        }
+        .margin-right{
+            margin-right:1rem;
+        }
+        .margin-left{
+            margin-left:20rem;
+        }
         .fixed-sidebar {
             position: sticky;
             top: 0;
-            height: 80vh; /* Full viewport height */
+            height: 90vh; /* Full viewport height */
             overflow-y: auto; /* Allow scrolling */
         }
 
         .scrollable-container {
-            max-height: 80vh; /* Limit height for scrolling */
+            max-height: 90vh; /* Limit height for scrolling */
             display: flex;
             flex-direction: column;
         }
@@ -158,19 +167,19 @@ if ($stmt) {
     </style>
 
     <div class="container mt-5">
-        <div class="row">
+        <div class="row ">
             <div class="col-lg-4 col-md-12 fixed-sidebar">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm ">
                     <div class="card-body text-center">
-                        <img src="https://i.pinimg.com/236x/93/19/e4/9319e481be9ccc90416cbd1da1404274.jpg" alt="Profile Image" class="rounded-circle img-fluid mb-3" width="150">
+                        <img src="./public/profile.jpg" width="150">
                         <h3><?php echo htmlspecialchars($row['patient_name']); ?></h3>
                         <p><strong>Age:</strong> <?php echo htmlspecialchars($row['age']); ?></p>
                         <p><strong>Email:</strong> <?php echo htmlspecialchars($row['email']); ?></p>
                         <p><strong>Contact No:</strong> <?php echo htmlspecialchars($row['contact_number']); ?></p>
-                        <div class="d-flex justify-content-center mt-4">
-                            <form method="POST" action="" class="mr-2">
+                        <div class="d-flex justify-content-center mt-4 padding">
+                            <form method="POST" action="" class="mr-2 ">
                                 <input type="hidden" name="delete_profile" value="1">
-                                <button type="submit" class="btn btn-danger">DELETE</button>
+                                <button type="submit" class="btn btn-danger margin-right " onclick="return confirm('Are you sure you want to delete this hospital?');">DELETE</button>
                             </form>
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">EDIT</button>
                         </div>
@@ -185,7 +194,7 @@ if ($stmt) {
                                 <label for="report_file">Upload Medical Report (PDF):</label>
                                 <input type="file" class="form-control-file" name="report_file" id="report_file" accept=".pdf" required>
                             </div>
-                            <div class="text-center">
+                            <div class="text-center padding">
                                 <button type="submit" class="btn btn-success">Upload Report</button>
                             </div>
                         </form>
@@ -287,9 +296,9 @@ if ($stmt) {
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit Profile</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <div class="modal-header aside">
+                    <h5 class="modal-title " id="editModalLabel">Edit Profile</h5>
+                    <button type="button" class="close btn btn-success margin-left" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
