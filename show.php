@@ -4,7 +4,9 @@ ob_start();
 
 // Database connection (replace with your actual connection code)
 include 'db.php';
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -32,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_appointment'])) {
     // Sanitize and retrieve form data
     $patient_name = trim($_POST['patient_name']);
     $age = intval($_POST['age']);  // Ensure age is an integer
-    $email = trim($_POST['email']);
+    $email = $_SESSION['email'];
     $contact_number = trim($_POST['contact_number']);
     $reason = trim($_POST['reason']);
 
