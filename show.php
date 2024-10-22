@@ -1,7 +1,7 @@
 <?php
 // Start output buffering
 ob_start();
-
+session_start();
 // Database connection (replace with your actual connection code)
 include 'db.php';
 
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_appointment'])) {
     // Sanitize and retrieve form data
     $patient_name = trim($_POST['patient_name']);
     $age = intval($_POST['age']);  // Ensure age is an integer
-    $email = trim($_POST['email']);
+    $email = $_SESSION['email'];
     $contact_number = trim($_POST['contact_number']);
     $reason = trim($_POST['reason']);
 
@@ -106,7 +106,12 @@ if ($id) {
                          <h1><?php echo htmlspecialchars($data['current_token']) ?></h1>
                     </div>
                 </div>
-                <button class="form-control out" style="text-align: center; font-weight: bolder; color: white; background-color: rgb(214, 132, 0); width: 100%; padding: 8px; border: none; border-radius: 25px; margin-top: 8px;" data-toggle="modal" data-target="#bookNow">Book Now</button>
+                <?php if(isset($_SESSION['email'])  ){
+                echo '<button class="form-control out" style="text-align: center; font-weight: bolder; color: white; background-color: rgb(214, 132, 0); width: 100%; padding: 8px; border: none; border-radius: 25px; margin-top: 8px;" data-toggle="modal" data-target="#bookNow">Book Now</button>';
+                }
+                else{
+                  echo '<a href="login.php" style="text-decoration:none;"><button class="form-control out" style="text-align: center; font-weight: bolder; color: white; background-color: rgb(214, 132, 0); width: 100%; padding: 8px; border: none; border-radius: 25px; margin-top: 8px;" data-toggle="modal" data-target="#bookNow">Book Now</button></a>';
+                }?>
             </div>
             <div class="buy">
                 <div class="flex" style="gap: 55px;">

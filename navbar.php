@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 ?>
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i></a>
+        <a class="navbar-brand" ><i style="height: 19px; width: 7px;" class="fa-solid fa-circle-h"></i></a>
         <button class="navbar-toggler toggle" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
