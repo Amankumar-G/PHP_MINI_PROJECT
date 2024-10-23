@@ -99,7 +99,7 @@ if ($id) {
         <img class="coverImg" src="<?php echo htmlspecialchars($data['image']); ?>" alt="image">
     </div>
     <div class="box-2">
-        <div class="flex dibba" style="gap: 20px;">
+        <div class="flex dibba" style="gap: 20px; top: 96px;">
             <div class="buy middle">
                 <div style="display: flex; justify-content: center; flex-direction:column">
                     <p>Current token Number</p>
@@ -149,7 +149,7 @@ if ($id) {
                     </div>
                     <div class="form-group">
                         <label for="contact_number">Contact Number</label>
-                        <input type="text" class="form-control" name="contact_number" id="contact_number" required>
+                        <input type="number" class="form-control" name="contact_number" id="contact_number" required>
                     </div>
                     <div class="form-group">
                         <label for="reason">Reason for Appointment</label>

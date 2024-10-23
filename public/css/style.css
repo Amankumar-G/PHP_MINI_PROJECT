@@ -40,7 +40,6 @@ body{
 }
 
 .box-2 {
-    margin-top: 40px;
     width: 40vw;
   }
 
@@ -56,7 +55,6 @@ body{
 
   .dibba {
     position: sticky;
-    top: 60px;
     z-index: 1;
   }
 

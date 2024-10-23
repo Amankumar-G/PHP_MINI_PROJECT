@@ -47,6 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['complete_appointment']
     }
 
     $delete_stmt->close();
+    header("Location: patient_details.php");
 }
 
 // Handle reset current token
@@ -92,11 +93,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['reset_token'])) {
                 <td><?php echo htmlspecialchars($appointment['email']); ?></td>
                 <td><?php echo htmlspecialchars($appointment['contact_number']); ?></td>
                 <td><?php echo htmlspecialchars($appointment['reason']); ?></td>
-                <td><?php echo htmlspecialchars($appointment['token']); ?></td>
+                <td><?php echo htmlspecialchars($appointment['token_number']); ?></td>
                 <td>
                     <form method="POST" action="">
                         <input type="hidden" name="appointment_id" value="<?php echo $appointment['id']; ?>">
                         <button type="submit" name="complete_appointment" class="btn btn-success">Complete</button>
+
                     </form>
                 </td>
             </tr>
